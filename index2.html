@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Método Gestão com Balanço Patrimonial</title>
+
+  <style>
+    :root {
+      --blue-dark: #1E2A38;
+      --gold: #D4A017;
+      --orange-light: #FFC58F;
+      --beige: #F9F6F1;
+      --text-dark: #1E2A38;
+      --text-body: #707070;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #fdfdfd;
+      color: var(--text-body);
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* CTA genérico */
+
+    .cta-button {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--blue-dark);
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+      text-align: center;
+    }
+
+    .cta-button:hover {
+      filter: brightness(0.95);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Animação simples de scroll */
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section {
+      padding: 64px 0;
+    }
+
+    section h2 {
+      font-size: 2rem;
+      text-align: center;
+      color: var(--text-dark);
+      margin-bottom: 24px;
+    }
+
+    section p.section-intro {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 32px auto;
+      font-size: 1rem;
+    }
+
+    /* HERO – Promessa + Identificação */
+
+    .hero {
+      background: radial-gradient(circle at top left, #223549 0, #1E2A38 45%, #141c26 100%);
+      color: var(--white);
+      padding: 80px 0 72px 0;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 32px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 2.6rem;
+      margin-bottom: 12px;
+    }
+
+    .hero p.lead {
+      font-size: 1.1rem;
+      max-width: 540px;
+      margin-bottom: 18px;
+      color: #e9edf4;
+    }
+
+    .hero-bullets {
+      list-style: none;
+      margin: 16px 0 26px 0;
+      padding: 0;
+    }
+
+    .hero-bullets li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 10px;
+      font-size: 0.96rem;
+    }
+
+    .hero-bullets li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--orange-light);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .hero-secondary {
+      font-size: 0.95rem;
+      color: #d1d6e0;
+      margin-top: 8px;
+    }
+
+    .hero-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .hero-cta-note {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .hero-right {
+      text-align: center;
+    }
+
+    .ebook-card {
+      background: rgba(15, 23, 32, 0.9);
+      border-radius: 18px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    .ebook-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 1rem;
+      color: var(--orange-light);
+    }
+
+    .ebook-tag {
+      font-size: 0.8rem;
+      color: #b7beca;
+      margin-bottom: 12px;
+    }
+
+    .ebook-border {
+      border-radius: 14px;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      padding: 14px 10px;
+      font-size: 0.9rem;
+    }
+
+    /* BLOCO REALIDADE / PROBLEMA (VTSD – Dor + Dados) */
+
+    .realidade {
+      background: var(--beige);
+    }
+
+    .realidade .box {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 24px 20px;
+      max-width: 850px;
+      margin: 0 auto;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .realidade .headline-dado {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .realidade p {
+      font-size: 0.97rem;
+      margin-bottom: 10px;
+    }
+
+    .realidade p strong {
+      color: var(--text-dark);
+    }
+
+    .fonte {
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: 10px;
+      opacity: 0.85;
+    }
+
+    /* BLOCO – PARA QUEM É (avatar, identificação) */
+
+    .para-quem {
+      background: #ffffff;
+    }
+
+    .para-quem-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 28px;
+      margin-top: 18px;
+    }
+
+    .para-quem-card {
+      background: var(--beige);
+      border-radius: 10px;
+      padding: 18px 16px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .para-quem-card h3 {
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .para-quem-card ul {
+      padding-left: 18px;
+    }
+
+    .para-quem-card li {
+      margin-bottom: 6px;
+    }
+
+    /* VOCÊ RECEBE – Conteúdo + Benefícios diretos */
+
+    .features {
+      background: #ffffff;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .feature-item {
+      background: var(--beige);
+      border-radius: 10px;
+      padding: 20px 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      font-size: 0.95rem;
+    }
+
+    .feature-item h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: var(--text-dark);
+    }
+
+    .feature-item p {
+      font-size: 0.95rem;
+    }
+
+    /* TÓPICOS PRINCIPAIS – Linha bege com mais respiro */
+
+    .topics {
+      background: var(--beige);
+      padding: 72px 0;
+    }
+
+    .topics ul {
+      list-style: none;
+      max-width: 720px;
+      margin: 0 auto 24px auto;
+      padding-left: 0;
+    }
+
+    .topics li {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.96rem;
+    }
+
+    .topics li span.check {
+      color: var(--gold);
+      margin-top: 2px;
+      font-weight: 700;
+    }
+
+    .topics p.bonus {
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    /* PLANO EM 3 PASSOS – Mecanismo / caminho */
+
+    .steps {
+      background: #ffffff;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 22px;
+    }
+
+    .step-card {
+      background: var(--beige);
+      border-radius: 10px;
+      padding: 18px 16px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .step-card h4 {
+      color: var(--text-dark);
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    /* PROVA LÓGICA – Explica o porquê funciona */
+
+    .logic {
+      background: #ffffff;
+    }
+
+    .logic-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 18px;
+    }
+
+    .logic-block {
+      background: var(--beige);
+      border-radius: 10px;
+      padding: 18px 16px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .logic-block h3 {
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    /* OFERTA – Preço, ancoragem, BF */
+
+    .oferta {
+      background: var(--blue-dark);
+      color: var(--white);
+    }
+
+    .oferta-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .oferta h2 {
+      color: var(--orange-light);
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .oferta p {
+      font-size: 0.97rem;
+      margin-bottom: 10px;
+    }
+
+    .oferta .bf-badge {
+      display: inline-block;
+      background: var(--orange-light);
+      color: var(--blue-dark);
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .oferta .price {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 10px 0 4px 0;
+    }
+
+    .oferta .price span {
+      text-decoration: line-through;
+      opacity: 0.75;
+      font-size: 0.9rem;
+      margin-right: 6px;
+    }
+
+    .oferta .sub {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .oferta .guarantee-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #18a76b;
+      padding: 6px 14px;
+      font-size: 0.9rem;
+      border-radius: 999px;
+      font-weight: 600;
+      margin: 12px 0;
+    }
+
+    .oferta .cta-button {
+      margin-top: 16px;
+    }
+
+    .oferta .cta-note {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-top: 6px;
+    }
+
+    /* GARANTIA DETALHADA */
+
+    .guarantee {
+      background: var(--beige);
+    }
+
+    .guarantee .box {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 22px 18px;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 0.96rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    .guarantee strong {
+      color: var(--text-dark);
+    }
+
+    /* DEPOIMENTOS – Prova social (CSS mantido, seção HTML removida) */
+
+    .testimonials {
+      background: #ffffff;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .testimonial {
+      background: var(--beige);
+      border-radius: 10px;
+      padding: 18px 16px;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .testimonial p.name {
+      margin-top: 8px;
+      font-weight: 600;
+      color: var(--text-dark);
+      text-align: right;
+    }
+
+    /* FAQ (accordion) */
+
+    .faq {
+      background: #ffffff;
+    }
+
+    .faq-list {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid #ddd;
+    }
+
+    .faq-question {
+      cursor: pointer;
+      padding: 12px 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 0.96rem;
+    }
+
+    .faq-question span.icon {
+      transition: transform 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 4px 10px 4px;
+      font-size: 0.94rem;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-question span.icon {
+      transform: rotate(90deg);
+    }
+
+    /* CTA final */
+
+    .final-cta {
+      background: var(--blue-dark);
+      color: var(--white);
+      text-align: center;
+    }
+
+    .final-cta p {
+      max-width: 720px;
+      margin: 8px auto;
+      font-size: 0.97rem;
+    }
+
+    .final-cta .cta-button {
+      margin-top: 14px;
+      margin-right: 8px;
+    }
+
+    /* Botão flutuante WhatsApp */
+
+    .whatsapp-floating {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: #25D366;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      z-index: 9999;
+      display: none;
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+
+    .whatsapp-floating i {
+      font-style: normal;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    /* Rodapé */
+
+    footer {
+      background: #111820;
+      color: #cccccc;
+      text-align: center;
+      padding: 14px;
+      font-size: 0.82rem;
+    }
+
+    footer a {
+      color: #cccccc;
+    }
+
+    /* Responsivo */
+
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+      .para-quem-grid,
+      .feature-grid,
+      .steps-grid,
+      .logic-grid,
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero {
+        text-align: left;
+      }
+      .hero-right {
+        max-width: 420px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 64px 0 52px 0;
+      }
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .cta-button {
+        width: 100%;
+        margin-right: 0;
+      }
+      section {
+        padding: 52px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HERO – PROMESSA + IDENTIFICAÇÃO -->
+  <section class="hero reveal">
+    <div class="container hero-inner">
+      <div>
+        <h1>Método Gestão com Balanço Patrimonial</h1>
+        <p class="lead">
+          Pare de tomar decisões no escuro — descubra como usar o Balanço Patrimonial como ferramenta prática
+          para tomar decisões seguras e escolher, com clareza, o caminho do crescimento.
+        </p>
+        <ul class="hero-bullets">
+          <li>Você sente que trabalha duro, mas o negócio não evolui como deveria.</li>
+          <li>Isso não é falta de esforço — é falta de direção financeira e clareza dos números.</li>
+          <li>Este método transforma números em clareza para você crescer com segurança.</li>
+        </ul>
+        <div class="hero-cta-wrap">
+          <a href="#oferta" class="cta-button">Quero crescer com segurança</a>
+          <p class="hero-cta-note">Pagamento único · acesso digital imediato ao e-book em PDF</p>
+        </div>
+        <p class="hero-secondary">
+          Você escolhe o caminho: crescer com planejamento financeiro ou continuar no risco da falta de clareza.
+        </p>
+      </div>
+
+      <div class="hero-right">
+        <div class="ebook-card">
+          <div class="ebook-title">E-book completo</div>
+          <div class="ebook-tag">Método Gestão com Balanço Patrimonial</div>
+          <div class="ebook-border">
+            <p style="font-size:0.9rem;">
+              Um guia prático para usar o Balanço Patrimonial como bússola da gestão. Organize seu capital de giro,
+              entenda o quanto deve, o quanto tem e tome decisões de crescimento com segurança.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMA REAL / DADOS (VTSD – Dor) -->
+  <section class="realidade reveal">
+    <div class="container">
+      <h2>A maioria não quebra por falta de esforço</h2>
+      <p class="section-intro">
+        Eles quebram por falta de clareza financeira.
+      </p>
+      <div class="box">
+        <p class="headline-dado">
+          Sem saber o que a empresa tem, o que deve e quanto realmente lucra, qualquer decisão vira achismo — e achismo custa caro.
+        </p>
+        <p>
+          A rotina é corrida, as contas chegam, o dinheiro entra e sai o tempo todo. Sem um mapa financeiro, decisões como
+          pegar empréstimo, aumentar estoque ou fazer uma retirada maior acabam sendo tomadas no improviso.
+        </p>
+        <p>
+          O Balanço Patrimonial organiza essa bagunça. Ele mostra, de forma simples, <strong>o que a empresa possui</strong>,
+          <strong>o que deve</strong> e <strong>qual é o patrimônio que realmente é seu</strong>. A partir daí, você enxerga
+          onde está pisando e consegue planejar o próximo passo com segurança.
+        </p>
+        <p>
+          Com poucos passos e o método certo, você descobre onde realmente está e para onde pode ir sem colocar o negócio em risco.
+        </p>
+      </div>
+      <p class="fonte"><em>*Inspirado em dados de sobrevivência de empresas (IBGE, Sebrae).</em></p>
+    </div>
+  </section>
+
+  <!-- PARA QUEM É (avatar) -->
+  <section class="para-quem reveal">
+    <div class="container">
+      <h2>Para quem é este método</h2>
+      <p class="section-intro">
+        Se você sente que trabalha muito, mas não tem certeza se o negócio está crescendo ou só sobrevivendo, este e-book é para você.
+      </p>
+
+      <div class="para-quem-grid">
+        <div class="para-quem-card">
+          <h3>MEIs e pequenos empresários</h3>
+          <ul>
+            <li>Não consegue dizer com segurança quanto realmente sobra no fim do mês.</li>
+            <li>Sente o caixa apertado mesmo quando as vendas aumentam.</li>
+            <li>Tem medo de investir porque não sabe se a empresa aguenta o risco.</li>
+          </ul>
+        </div>
+        <div class="para-quem-card">
+          <h3>Gestores que querem crescer com segurança</h3>
+          <ul>
+            <li>Quer usar os relatórios contábeis como aliados na tomada de decisão.</li>
+            <li>Busca uma base simples para sair do achismo e decidir com dados.</li>
+            <li>Deseja construir um caminho de crescimento sustentável, sem improviso financeiro.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOCÊ RECEBE (conteúdo direto do e-book) -->
+  <section class="features reveal">
+    <div class="container">
+      <h2>Você recebe</h2>
+      <p class="section-intro">
+        Um material direto ao ponto para transformar o Balanço Patrimonial em uma ferramenta de gestão prática, e não apenas em obrigação contábil.
+      </p>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <h3>Conteúdo Completo</h3>
+          <p>
+            Aprenda, do zero, os conceitos essenciais do Balanço Patrimonial e enxergue seu negócio como uma empresa
+            profissional de verdade, com visão clara de ativos, passivos e patrimônio líquido.
+          </p>
+        </div>
+        <div class="feature-item">
+          <h3>Aplicação Prática</h3>
+          <p>
+            Nada de teoria solta. Você vai aplicar imediatamente: organizar dados, montar o seu balanço, analisar os
+            números e usar essas informações para decidir com segurança.
+          </p>
+        </div>
+        <div class="feature-item">
+          <h3>Acesso Vitalício</h3>
+          <p>
+            Tenha acesso ilimitado ao conteúdo e revisite o material sempre que precisar. Sem mensalidades,
+            sem prazo de expiração.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TÓPICOS PRINCIPAIS DO E-BOOK -->
+  <section class="topics reveal">
+    <div class="container">
+      <h2>Tópicos principais do e-book</h2>
+      <p class="section-intro">
+        Cada tema foi pensado para ajudar você a dominar o Balanço Patrimonial e transformar a gestão do seu negócio.
+      </p>
+      <ul>
+        <li><span class="check">✓</span><span>A realidade dura do mercado</span></li>
+        <li><span class="check">✓</span><span>Vantagens do Balanço Patrimonial</span></li>
+        <li><span class="check">✓</span><span>Entendendo Ativo, Passivo e Patrimônio Líquido</span></li>
+        <li><span class="check">✓</span><span>Capital de giro e saúde financeira</span></li>
+        <li><span class="check">✓</span><span>Fluxo de caixa: o pulso da empresa</span></li>
+        <li><span class="check">✓</span><span>Tomada de decisão com base em dados</span></li>
+        <li><span class="check">✓</span><span>Exemplos práticos de aplicação</span></li>
+      </ul>
+      <p class="bonus">
+        Bônus: 10 erros comuns que fazem empresas quebrarem — e como evitá-los.
+      </p>
+    </div>
+  </section>
+
+  <!-- PLANO EM 3 PASSOS (mecanismo / caminho) -->
+  <section class="steps reveal">
+    <div class="container">
+      <h2>Seu plano em 3 passos</h2>
+      <p class="section-intro">
+        Um caminho simples para sair do achismo e assumir o controle da gestão financeira.
+      </p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <h4>1. Organize</h4>
+          <p>
+            Liste todos os recursos da empresa (caixa, estoque, equipamentos) e todas as obrigações
+            (fornecedores, empréstimos, impostos). Descubra sua situação real, sem filtros.
+          </p>
+        </div>
+        <div class="step-card">
+          <h4>2. Analise</h4>
+          <p>
+            Monte o seu Balanço Patrimonial (ativos x passivos) e veja se os recursos cobrem as dívidas.
+            Um patrimônio líquido positivo mostra margem para crescer; caso contrário, é hora de ajustar o rumo.
+          </p>
+        </div>
+        <div class="step-card">
+          <h4>3. Planeje</h4>
+          <p>
+            Use os números para definir metas realistas e traçar um plano de crescimento seguro.
+            Invista apenas onde as finanças estiverem equilibradas, evitando riscos desnecessários.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA LÓGICA – POR QUE FUNCIONA -->
+  <section class="logic reveal">
+    <div class="container">
+      <h2>Por que esse método funciona</h2>
+      <div class="logic-grid">
+        <div class="logic-block">
+          <h3>Transforma esforço em direção</h3>
+          <p>
+            Você já trabalha muito. O método organiza os números para mostrar se esse esforço está construindo
+            patrimônio ou só mantendo o negócio no limite.
+          </p>
+        </div>
+        <div class="logic-block">
+          <h3>Conecta números com decisões reais</h3>
+          <p>
+            Cada conceito do balanço é ligado a decisões do dia a dia: contratar, investir, pegar empréstimo
+            ou segurar o caixa. Não é teoria acadêmica, é gestão prática.
+          </p>
+        </div>
+        <div class="logic-block">
+          <h3>Focado em pequenos negócios</h3>
+          <p>
+            Foi pensado para MEIs e pequenas empresas que não têm grande equipe financeira, mas precisam
+            de visão profissional para crescer com segurança.
+          </p>
+        </div>
+        <div class="logic-block">
+          <h3>Clareza para escolher o caminho certo</h3>
+          <p>
+            Com os números organizados, você enxerga com clareza o caminho do crescimento — em vez de
+            seguir no escuro e correr o risco de levar o negócio à falência.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTA / PREÇO (VTSD – Oferta clara + Black Friday) -->
+  <section class="oferta reveal" id="oferta">
+    <div class="container">
+      <div class="oferta-inner">
+        <!-- BLACK FRIDAY START -->
+        <span class="bf-badge">Black Friday – oferta especial</span>
+        <h2>Invista na clareza financeira do seu negócio</h2>
+        <p>
+          Em vez de continuar decidindo no improviso, você pode ter um método simples para usar o
+          Balanço Patrimonial a seu favor todos os dias.
+        </p>
+
+        <div class="price">
+          <span>R$ 97,00</span> R$ 47,00
+        </div>
+        <p class="sub">Acesso imediato. Pagamento 100% seguro.</p>
+
+        <div class="guarantee-badge">
+          <span>✓</span> Garantia de 7 dias — risco zero.
+        </div>
+
+        <p>
+          Se dentro de 7 dias você sentir que o conteúdo não te ajudou, basta pedir o reembolso.
+          Você recebe 100% do valor de volta. Sem burocracia.
+        </p>
+
+        <a href="https://pay.hotmart.com/E102561673O?off=hovznk5b&hotfeature=51&_hi=eyJjaWQiOiIxNzYwMDU1NTIwODIwMTE5MjQyOTExNTI2NTY3NjMwIiwiYmlkIjoiMTc2MDA1NTUyMDgyMDExOTI0MjkxMTUyNjU2NzYzMCIsInNpZCI6ImFkNzVlZjg5NTg1NDQ4M2JiYjE1Njc3M2FiMjQxN2FjIn0=.1761777575433&bid=1761777576781" class="cta-button">Sim, quero crescer com segurança</a>
+        <p class="cta-note">
+          Após a confirmação do pagamento, o acesso é enviado automaticamente para o e-mail cadastrado.
+        </p>
+        <!-- BLACK FRIDAY END -->
+      </div>
+    </div>
+  </section>
+
+  <!-- GARANTIA DETALHADA -->
+  <section class="guarantee reveal">
+    <div class="container">
+      <h2>Garantia 7 dias</h2>
+      <div class="box">
+        <p>
+          O objetivo deste material é te dar clareza e segurança na gestão financeira. Por isso,
+          você tem <strong>7 dias</strong> para ler, aplicar os conceitos e decidir se fez sentido para você.
+        </p>
+        <br />
+        <p>
+          Se nesse período entender que o e-book não te ajudou, é só solicitar o reembolso e
+          devolvemos 100% do valor pago. Simples assim.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+<!-- SEÇÃO 5 – SUPORTE -->
+<section class="suporte reveal" style="background:#ffffff;">
+  <div class="container">
+    <h2>Suporte ao Aplicar o Método</h2>
+    <p class="section-intro">
+      Mesmo sem equipe, faço questão de acompanhar quem entra para aplicar corretamente o método.
+    </p>
+
+    <div style="
+      background: var(--beige);
+      padding: 22px 18px;
+      border-radius: 12px;
+      max-width: 760px;
+      margin: 0 auto;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      font-size: 1rem;">
+      <strong>“Dúvidas ao aplicar o conteúdo?</strong><br>
+      Você pode entrar em contato por e-mail e <strong>eu mesmo respondo</strong> para te ajudar na aplicação.”
+    </div>
+  </div>
+</section>
+
+
+<!-- SEÇÃO 6 – BÔNUS ESPECIAL -->
+<section class="bonus reveal" style="background:var(--beige);">
+  <div class="container">
+    <h2>Bônus Especial – Incluso Gratuitamente</h2>
+    <p class="section-intro">Um complemento essencial para evitar erros que travam o crescimento do negócio.</p>
+
+    <div style="
+      background: var(--white);
+      border-radius: 12px;
+      padding: 26px 22px;
+      max-width: 820px;
+      margin: 0 auto;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);">
+
+      <h3 style="color:var(--text-dark); margin-bottom:6px; font-size:1.3rem;">
+        📘 10 Erros Comuns na Gestão do Seu Negócio
+      </h3>
+
+      <p style="font-size:1rem; margin-bottom:16px; color:var(--text-body);">
+        Descubra os erros mais recorrentes que fazem empresas quebrarem — e como evitá-los com decisões
+        baseadas em dados e clareza financeira.
+      </p>
+
+      <div style="
+        background: var(--orange-light);
+        color: var(--blue-dark);
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 0.95rem;">
+        💰 Valor estimado: R$ 24 — incluso gratuitamente
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- SEÇÃO 7 – AUTORIDADE (VERSÃO CURADOR) -->
+<section class="autoridade reveal" style="background:#ffffff;">
+  <div class="container">
+    <h2>Por Que Confiar Neste Método?</h2>
+    <p class="section-intro">
+      Em vez de criar algo baseado apenas em opinião, este material foi construído como um
+      <strong>guia prático</strong> baseado em métodos aplicados por diversas empresas do mercado — traduzidos
+      para quem está começando ou precisa de clareza imediata.
+    </p>
+
+    <div style="
+      background: var(--beige);
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+      font-size: 1rem;">
+      
+      <ul style="padding-left:18px; line-height:1.6;">
+        <li>O método é baseado em lógica financeira, com base na contabilidade gerencial.</li>
+        <li>Organizações usam essa mesma estrutura para evitar erros e tomar decisões seguras.</li>
+        <li>Todo conteúdo é simplificado para <strong>quem ainda não domina contabilidade</strong>.</li>
+        <li>O método foi filtrado e adaptado para ser direto, aplicável e sem jargões.</li>
+      </ul>
+      
+      <p style="margin-top:12px;">
+        <strong>Você não precisa ser especialista</strong> — precisa apenas de um método que mostra
+        onde está e qual o próximo passo seguro.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- FAQ (VTSD – quebra de objeções) -->
+  <section class="faq reveal">
+    <div class="container">
+      <h2>Dúvidas frequentes</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Preciso entender contabilidade para usar o método?</span>
+            <span class="icon">▶</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Não. O material foi escrito em linguagem simples, para quem não tem formação na área.
+              Você não precisa ser contador para aplicar o que está no e-book.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Serve para MEI e pequenas empresas?</span>
+            <span class="icon">▶</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Sim. O foco é justamente a realidade de negócios menores, que precisam de uma ferramenta
+              simples para organizar as finanças e planejar o crescimento.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>O que eu recebo ao comprar?</span>
+            <span class="icon">▶</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Você recebe o e-book digital “Método Gestão com Balanço Patrimonial” em PDF, com todo o
+              conteúdo explicado passo a passo, além do bônus com erros comuns a evitar.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Como vou receber o acesso?</span>
+            <span class="icon">▶</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Após a confirmação do pagamento, o acesso é enviado automaticamente para o e-mail que você
+              informou na hora da compra, para baixar o PDF quando quiser.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>E se eu não gostar do conteúdo?</span>
+            <span class="icon">▶</span>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Você tem 7 dias para solicitar o reembolso e recuperar 100% do investimento. Sem burocracia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL (fechamento VTSD) -->
+  <section class="final-cta reveal">
+    <div class="container">
+      <h2>Agora você escolhe o caminho</h2>
+      <p>
+        Crescer com segurança, usando o Balanço Patrimonial como aliado, ou continuar tomando decisões
+        importantes no improviso e correndo riscos desnecessários.
+      </p>
+      <p>
+        Com o <strong>Método de Gestão pelo Balanço Patrimonial</strong>, você assume o controle do negócio
+        com dados, direção e confiança. O investimento é de <strong>R$ 47,00</strong> na Black Friday.
+      </p>
+
+      <a href="https://pay.hotmart.com/E102561673O?off=hovznk5b&hotfeature=51&_hi=e
+        yJjaWQiOiIxNzYwMDU1NTIwODIwMTE5MjQyOTExNTI2NTY3NjMwIiwiYmlkIjoiMTc2MDA1NTUyMDgyMDExOTI0MjkxMTUyNjU2NzYzMCIsInNpZCI6ImFkNzVlZjg5NTg1NDQ4M2JiYjE1Njc3M2FiMjQxN2FjIn0=.1761777575433&bid=1761777576781"
+        class="cta-button">Quero garantir meu acesso por R$ 47 com risco zero</a>
+    <!-- <a href="https://wa.me/5512991473098" class="cta-button">Fale comigo</a> -->
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    © 2025 O Gestor Eficiente. Todos os direitos reservados. |
+    <a href="#">Política de Privacidade</a> |
+    <a href="#">Contato</a>
+  </footer>
+
+  <!-- BOTÃO FLUTUANTE WHATSAPP 
+  <a href="https://wa.me/5512991473098" 
+     class="whatsapp-floating" 
+     id="zapButton"
+     aria-label="Fale comigo no WhatsApp">
+    <i>💬</i>
+  </a>-->
+
+  <script>
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    function handleReveal() {
+      const windowHeight = window.innerHeight;
+      revealEls.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < windowHeight - 80) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', handleReveal);
+    window.addEventListener('load', handleReveal);
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        item.classList.toggle('active');
+      });
+    });
+
+    // Scroll suave para âncoras
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href').substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          window.scrollTo({
+            top: targetEl.offsetTop - 60,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Botão WhatsApp aparece a partir da seção da oferta
+    const zapButton = document.getElementById('zapButton');
+    const ofertaSection = document.getElementById('oferta');
+
+    function checkZapVisibility() {
+      const rect = ofertaSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 150) {
+        zapButton.style.display = 'block';
+      } else {
+        zapButton.style.display = 'none';
+      }
+    }
+
+    window.addEventListener('scroll', checkZapVisibility);
+    window.addEventListener('load', checkZapVisibility);
+  </script>
+</body>
+</html>
